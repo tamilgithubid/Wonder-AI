@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { MagicButton, MagicBadge, MagicTooltip } from '@/components/magicui'
 import {
     Copy,
     Check,
@@ -46,7 +45,7 @@ export const CodeBlock = React.memo(({
 
             // Reset copied state after 2 seconds
             setTimeout(() => setCopied(false), 2000)
-        } catch (error) {
+        } catch {
             toast.error('Failed to copy code')
         }
     }, [codeContent])
@@ -97,9 +96,9 @@ export const CodeBlock = React.memo(({
             <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border border-b-0 rounded-t-lg">
                 <div className="flex items-center gap-2">
                     <Code2 className="w-4 h-4 text-muted-foreground" />
-                    <Badge variant="secondary" className="text-xs">
+                    <MagicBadge variant="secondary" className="text-xs">
                         {displayLanguage}
-                    </Badge>
+                    </MagicBadge>
                     {filename && (
                         <span className="text-sm text-muted-foreground font-mono">
                             {filename}
@@ -109,47 +108,50 @@ export const CodeBlock = React.memo(({
 
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     {allowCopy && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7"
-                            onClick={handleCopy}
-                            title="Copy code"
-                        >
-                            {copied ? (
-                                <Check className="w-3 h-3 text-green-500" />
-                            ) : (
-                                <Copy className="w-3 h-3" />
-                            )}
-                        </Button>
+                        <MagicTooltip content="Copy code">
+                            <MagicButton
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={handleCopy}
+                            >
+                                {copied ? (
+                                    <Check className="w-3 h-3 text-green-500" />
+                                ) : (
+                                    <Copy className="w-3 h-3" />
+                                )}
+                            </MagicButton>
+                        </MagicTooltip>
                     )}
 
                     {allowDownload && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7"
-                            onClick={handleDownload}
-                            title="Download as file"
-                        >
-                            <Download className="w-3 h-3" />
-                        </Button>
+                        <MagicTooltip content="Download as file">
+                            <MagicButton
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={handleDownload}
+                            >
+                                <Download className="w-3 h-3" />
+                            </MagicButton>
+                        </MagicTooltip>
                     )}
 
                     {isExecutableLanguage(language) && (
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7"
-                            onClick={handleExecute}
-                            disabled={isExecuting}
-                            title="Execute code"
-                        >
-                            <Play className={cn(
-                                "w-3 h-3",
-                                isExecuting && "animate-spin"
-                            )} />
-                        </Button>
+                        <MagicTooltip content="Execute code">
+                            <MagicButton
+                                variant="ghost"
+                                size="icon"
+                                className="h-7 w-7"
+                                onClick={handleExecute}
+                                disabled={isExecuting}
+                            >
+                                <Play className={cn(
+                                    "w-3 h-3",
+                                    isExecuting && "animate-spin"
+                                )} />
+                            </MagicButton>
+                        </MagicTooltip>
                     )}
                 </div>
             </div>

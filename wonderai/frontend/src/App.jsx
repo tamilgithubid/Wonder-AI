@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { Toaster } from '@/components/ui/sonner'
+import { MagicToaster } from '@/components/magicui'
 import { store } from '@/store'
 import { ChatLayout } from '@/components/ChatLayout'
 
@@ -13,7 +13,7 @@ function App() {
     <Provider store={store}>
       <div className="min-h-screen bg-background font-sans antialiased">
         <ChatLayout />
-        <Toaster />
+        <MagicToaster />
       </div>
     </Provider>
   )

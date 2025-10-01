@@ -118,3 +118,61 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Magic UI Custom Scrollbar Styles */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thumb-gray-300 {
+    scrollbar-color: rgb(209 213 219) transparent;
+  }
+  
+  .scrollbar-thumb-gray-600 {
+    scrollbar-color: rgb(75 85 99) transparent;
+  }
+  
+  .scrollbar-track-transparent {
+    scrollbar-color: transparent transparent;
+  }
+  
+  .hover\:scrollbar-thumb-gray-400:hover {
+    scrollbar-color: rgb(156 163 175) transparent;
+  }
+  
+  .dark\:scrollbar-thumb-gray-600 {
+    scrollbar-color: rgb(75 85 99) transparent;
+  }
+  
+  .dark\:hover\:scrollbar-thumb-gray-500:hover {
+    scrollbar-color: rgb(107 114 128) transparent;
+  }
+  
+  /* Webkit scrollbar styles */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(209 213 219);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(156 163 175);
+  }
+  
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(75 85 99);
+  }
+  
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(107 114 128);
+  }
+}

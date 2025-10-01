@@ -1,9 +1,13 @@
 import React, { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { 
+    MagicButton, 
+    MagicBadge, 
+    MagicSeparator, 
+    MagicNav, 
+    MagicNavItem,
+    MagicDialog 
+} from '@/components/magicui'
 import { ChatInterface } from './ChatInterface'
 import { Sidebar } from './Sidebar'
 import { HealthCheck } from './HealthCheck'
@@ -64,23 +68,30 @@ export const ChatLayout = React.memo(() => {
         dispatch(toggleSidebar())
     }, [dispatch])
 
+    // Mobile sidebar state
+    const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false)
+
     // Mobile sidebar component
     const MobileSidebar = React.memo(() => (
-        <Sheet>
-            <SheetTrigger asChild>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="md:hidden"
-                    aria-label="Open sidebar"
-                >
-                    <Menu className="h-5 w-5" />
-                </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0">
+        <>
+            <MagicButton
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setIsMobileSidebarOpen(true)}
+                aria-label="Open sidebar"
+            >
+                <Menu className="h-5 w-5" />
+            </MagicButton>
+            <MagicDialog 
+                open={isMobileSidebarOpen} 
+                onClose={() => setIsMobileSidebarOpen(false)}
+                size="sm"
+                className="p-0 max-w-xs"
+            >
                 <Sidebar isMobile={true} />
-            </SheetContent>
-        </Sheet>
+            </MagicDialog>
+        </>
     ))
 
     return (
@@ -104,7 +115,7 @@ export const ChatLayout = React.memo(() => {
                         <MobileSidebar />
 
                         {/* Desktop Sidebar Toggle */}
-                        <Button
+                        <MagicButton
                             variant="ghost"
                             size="icon"
                             onClick={handleToggleSidebar}
@@ -112,7 +123,7 @@ export const ChatLayout = React.memo(() => {
                             aria-label="Toggle sidebar"
                         >
                             <Menu className="h-5 w-5" />
-                        </Button>
+                        </MagicButton>
 
                         {/* Logo and Title */}
                         <div className="flex items-center gap-2">
@@ -123,39 +134,39 @@ export const ChatLayout = React.memo(() => {
                         </div>
 
                         {/* Connection Status */}
-                        <Badge
-                            variant={isConnected ? 'default' : 'secondary'}
+                        <MagicBadge
+                            variant={isConnected ? 'success' : 'secondary'}
                             className="hidden sm:inline-flex"
+                            pulse={isConnected}
+                            glow={isConnected}
                         >
                             {isConnected ? 'Connected' : 'Disconnected'}
-                        </Badge>
+                        </MagicBadge>
                     </div>
 
                     {/* Navigation */}
-                    <nav className="flex items-center gap-1">
+                    <MagicNav className="flex items-center gap-1">
                         {navigationItems.map((item) => {
                             const IconComponent = item.icon
                             return (
-                                <Button
+                                <MagicNavItem
                                     key={item.id}
-                                    variant={item.active ? 'default' : 'ghost'}
-                                    size="sm"
+                                    active={item.active}
                                     onClick={() => handleViewChange(item.id)}
                                     className="gap-2"
-                                    aria-pressed={item.active}
                                 >
                                     <IconComponent className="h-4 w-4" />
                                     <span className="hidden sm:inline">{item.label}</span>
-                                </Button>
+                                </MagicNavItem>
                             )
                         })}
 
-                        <Separator orientation="vertical" className="h-6 mx-2" />
+                        <MagicSeparator orientation="vertical" className="h-6 mx-2" gradient />
 
-                        <Button variant="ghost" size="icon" aria-label="Settings">
+                        <MagicButton variant="ghost" size="icon" aria-label="Settings">
                             <Settings className="h-4 w-4" />
-                        </Button>
-                    </nav>
+                        </MagicButton>
+                    </MagicNav>
                 </header>
 
                 {/* Health Check Status */}

@@ -5,9 +5,13 @@ import React, {
     useEffect,
     useActionState
 } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
+import { 
+    MagicButton, 
+    MagicInput, 
+    MagicBadge, 
+    MagicProgress,
+    MagicAlert 
+} from '@/components/magicui'
 import {
     Send,
     Paperclip,
@@ -65,7 +69,7 @@ export const MessageComposer = React.memo(({
     )
 
     // Enhanced loading state tracking
-    const [sendingState, setSendingState] = useState('idle') // idle, sending, streaming, success, error
+
 
     // Auto-resize textarea
     const adjustTextareaHeight = useCallback(() => {
@@ -145,7 +149,7 @@ export const MessageComposer = React.memo(({
     // Quick action buttons
     const QuickActions = React.memo(() => (
         <div className="flex items-center gap-1">
-            <Button
+            <MagicButton
                 type="button"
                 variant="ghost"
                 size="icon"
@@ -154,9 +158,9 @@ export const MessageComposer = React.memo(({
                 title="Attach files"
             >
                 <Paperclip className="w-4 h-4" />
-            </Button>
+            </MagicButton>
 
-            <Button
+            <MagicButton
                 type="button"
                 variant="ghost"
                 size="icon"
@@ -169,9 +173,9 @@ export const MessageComposer = React.memo(({
                 }}
             >
                 <ImageIcon className="w-4 h-4" />
-            </Button>
+            </MagicButton>
 
-            <Button
+            <MagicButton
                 type="button"
                 variant="ghost"
                 size="icon"
@@ -184,9 +188,9 @@ export const MessageComposer = React.memo(({
                 }}
             >
                 <MapIcon className="w-4 h-4" />
-            </Button>
+            </MagicButton>
 
-            <Button
+            <MagicButton
                 type="button"
                 variant="ghost"
                 size="icon"
@@ -195,7 +199,7 @@ export const MessageComposer = React.memo(({
                 title={isRecording ? 'Stop recording' : 'Start voice recording'}
             >
                 {isRecording ? <Square className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </Button>
+            </MagicButton>
         </div>
     ))
 
@@ -216,7 +220,7 @@ export const MessageComposer = React.memo(({
         attachments.length > 0 && (
             <div className="flex flex-wrap gap-2 p-3 border-b bg-muted/30">
                 {attachments.map(attachment => (
-                    <Badge
+                    <MagicBadge
                         key={attachment.id}
                         variant="secondary"
                         className="flex items-center gap-2 px-3 py-1"
@@ -224,7 +228,7 @@ export const MessageComposer = React.memo(({
                         <span className="text-xs truncate max-w-32">
                             {attachment.name}
                         </span>
-                        <Button
+                        <MagicButton
                             type="button"
                             variant="ghost"
                             size="icon"
@@ -232,8 +236,8 @@ export const MessageComposer = React.memo(({
                             onClick={() => removeAttachment(attachment.id)}
                         >
                             ×
-                        </Button>
-                    </Badge>
+                        </MagicButton>
+                    </MagicBadge>
                 ))}
             </div>
         )
@@ -242,8 +246,10 @@ export const MessageComposer = React.memo(({
     // Error display
     const ErrorDisplay = React.memo(() =>
         submitState?.error && (
-            <div className="px-4 py-2 text-sm text-destructive bg-destructive/10 border-b">
-                {submitState.error}
+            <div className="px-4 py-2">
+                <MagicAlert variant="error">
+                    {submitState.error}
+                </MagicAlert>
             </div>
         )
     )
@@ -284,7 +290,7 @@ export const MessageComposer = React.memo(({
 
                     {/* Message Input */}
                     <div className="flex-1 relative">
-                        <Textarea
+                        <MagicInput
                             ref={textareaRef}
                             name="message"
                             value={message}
@@ -297,6 +303,7 @@ export const MessageComposer = React.memo(({
                             }
                             disabled={isFormDisabled}
                             className="min-h-[40px] max-h-[120px] resize-none pr-12"
+                            multiline
                             rows={1}
                         />
 
@@ -309,32 +316,36 @@ export const MessageComposer = React.memo(({
                     </div>
 
                     {/* Streaming Toggle */}
-                    <Button
+                    <MagicButton
                         type="button"
                         onClick={() => setUseStreaming(!useStreaming)}
                         size="icon"
-                        variant={useStreaming ? "default" : "outline"}
+                        variant={useStreaming ? "magic" : "outline"}
                         className="h-10 w-10"
                         aria-label={useStreaming ? 'Streaming enabled' : 'Streaming disabled'}
                         title={useStreaming ? 'Streaming enabled' : 'Streaming disabled'}
+                        glow={useStreaming}
                     >
                         <Activity className="w-4 h-4" />
-                    </Button>
+                    </MagicButton>
 
                     {/* Send Button */}
-                    <Button
+                    <MagicButton
                         type="submit"
                         disabled={isFormDisabled || !message.trim()}
                         size="icon"
+                        variant="magic"
                         className="h-10 w-10"
                         aria-label="Send message"
+                        shimmer
+                        glow
                     >
                         {showSpinner ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
                             <Send className="w-4 h-4" />
                         )}
-                    </Button>
+                    </MagicButton>
                 </div>
 
                 {/* Voice Recording Indicator */}

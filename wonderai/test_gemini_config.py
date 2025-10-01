@@ -41,7 +41,7 @@ async def test_gemini_configuration():
         
         # Initialize service
         await gemini_service.initialize()
-        
+         
         # Test health check
         is_healthy = await gemini_service.health_check()
         print(f"   Health Check: {'✅ Passed' if is_healthy else '❌ Failed'}")

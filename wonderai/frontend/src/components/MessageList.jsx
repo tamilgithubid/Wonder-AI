@@ -1,10 +1,13 @@
-import React, { useMemo, useState, useCallback } from 'react'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
+import React, { useMemo } from 'react'
+import { 
+    MagicCard, 
+    MagicBadge, 
+    MagicButton, 
+    MagicAvatar, 
+    MagicSeparator, 
+    MagicSkeleton,
+    MagicTooltip 
+} from '@/components/magicui'
 import { CodeBlock } from './CodeBlock'
 import {
     User,
@@ -20,7 +23,6 @@ import {
     AlertCircle
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
 
 /**
  * Individual message component with enhanced UI/UX for loading states and code display
@@ -143,17 +145,12 @@ const MessageItem = React.memo(({ message }) => {
       ${isError ? 'opacity-60' : ''}
     `}>
             {/* Avatar */}
-            <Avatar className="w-8 h-8 mt-1 shrink-0">
-                <AvatarFallback className={
-                    isUser
-                        ? 'bg-primary text-primary-foreground'
-                        : isError
-                            ? 'bg-destructive text-destructive-foreground'
-                            : 'bg-secondary text-secondary-foreground'
-                }>
-                    {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
-                </AvatarFallback>
-            </Avatar>
+            <MagicAvatar 
+                className="w-8 h-8 mt-1 shrink-0"
+                fallback={isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+                online={!isError}
+                status={isError ? "away" : isStreaming ? "busy" : undefined}
+            />
 
             {/* Message Content */}
             <div className={`
@@ -161,17 +158,16 @@ const MessageItem = React.memo(({ message }) => {
         ${isUser ? 'items-end' : 'items-start'}
       `}>
                 {/* Message Bubble */}
-                <Card className={`
-          relative overflow-hidden
-          ${isUser
-                        ? 'bg-primary text-primary-foreground ml-auto'
-                        : isError
-                            ? 'bg-destructive/5 border-destructive/20'
-                            : 'bg-card border'
-                    }
-          ${isOptimistic ? 'animate-pulse' : ''}
-          ${isStreaming ? 'border-blue-200 bg-blue-50/50 dark:border-blue-800 dark:bg-blue-950/20' : ''}
-        `}>
+                <MagicCard 
+                    className={`
+                        relative overflow-hidden
+                        ${isUser ? 'ml-auto' : ''}
+                        ${isOptimistic ? 'animate-pulse' : ''}
+                    `}
+                    variant={isUser ? 'primary' : isError ? 'error' : 'default'}
+                    glow={isStreaming}
+                    animated={isStreaming}
+                >
                     {/* Status Indicator */}
                     <StatusIndicator />
 
@@ -231,7 +227,7 @@ const MessageItem = React.memo(({ message }) => {
                                 <MapIcon className="w-3 h-3" />
                                 <span>Map location</span>
                             </div>
-                            <Card className="p-2 bg-muted">
+                            <MagicCard className="p-2" variant="secondary">
                                 <p className="text-xs">
                                     📍 {message.map.center?.lat?.toFixed(4)}, {message.map.center?.lng?.toFixed(4)}
                                 </p>
@@ -244,7 +240,7 @@ const MessageItem = React.memo(({ message }) => {
                                 <div className="w-full h-24 bg-muted rounded border mt-2 flex items-center justify-center">
                                     <MapIcon className="w-6 h-6 opacity-50" />
                                 </div>
-                            </Card>
+                            </MagicCard>
                         </div>
                     )}
 
@@ -252,7 +248,7 @@ const MessageItem = React.memo(({ message }) => {
                     {isStreaming && (
                         <div className="inline-block w-2 h-4 bg-current animate-pulse ml-1" />
                     )}
-                </Card>
+                </MagicCard>
 
                 {/* Message Actions & Timestamp */}
                 <div className={`
@@ -265,9 +261,9 @@ const MessageItem = React.memo(({ message }) => {
 
                     {/* Token usage for AI messages */}
                     {!isUser && message.metadata?.tokensUsed && (
-                        <Badge variant="outline" className="text-xs">
+                        <MagicBadge variant="secondary" className="text-xs">
                             {message.metadata.tokensUsed} tokens
-                        </Badge>
+                        </MagicBadge>
                     )}
 
                     {!isOptimistic && !isStreaming && (
@@ -275,36 +271,39 @@ const MessageItem = React.memo(({ message }) => {
               flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity
               ${isUser ? 'flex-row-reverse' : 'flex-row'}
             `}>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6"
-                                onClick={handleCopy}
-                                title="Copy message"
-                            >
-                                <Copy className="w-3 h-3" />
-                            </Button>
+                            <MagicTooltip content="Copy message">
+                                <MagicButton
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6"
+                                    onClick={handleCopy}
+                                >
+                                    <Copy className="w-3 h-3" />
+                                </MagicButton>
+                            </MagicTooltip>
 
                             {!isUser && !isError && (
                                 <>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-6 w-6"
-                                        onClick={() => handleFeedback(true)}
-                                        title="Good response"
-                                    >
-                                        <ThumbsUp className="w-3 h-3" />
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-6 w-6"
-                                        onClick={() => handleFeedback(false)}
-                                        title="Poor response"
-                                    >
-                                        <ThumbsDown className="w-3 h-3" />
-                                    </Button>
+                                    <MagicTooltip content="Good response">
+                                        <MagicButton
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-6 w-6"
+                                            onClick={() => handleFeedback(true)}
+                                        >
+                                            <ThumbsUp className="w-3 h-3" />
+                                        </MagicButton>
+                                    </MagicTooltip>
+                                    <MagicTooltip content="Poor response">
+                                        <MagicButton
+                                            variant="ghost"
+                                            size="icon"
+                                            className="h-6 w-6"
+                                            onClick={() => handleFeedback(false)}
+                                        >
+                                            <ThumbsDown className="w-3 h-3" />
+                                        </MagicButton>
+                                    </MagicTooltip>
                                 </>
                             )}
                         </div>
@@ -354,7 +353,7 @@ export const MessageList = React.memo(({
                     {/* Add separator between different speakers */}
                     {index < displayMessages.length - 1 &&
                         displayMessages[index].role !== displayMessages[index + 1].role && (
-                            <Separator className="my-4" />
+                            <MagicSeparator className="my-4" gradient />
                         )}
                 </React.Fragment>
             ))}

@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { 
     MagicButton, 
-    MagicInput, 
+    MagicTextarea, 
     MagicBadge, 
     MagicProgress,
     MagicAlert 
@@ -290,7 +290,7 @@ export const MessageComposer = React.memo(({
 
                     {/* Message Input */}
                     <div className="flex-1 relative">
-                        <MagicInput
+                        <MagicTextarea
                             ref={textareaRef}
                             name="message"
                             value={message}
@@ -302,9 +302,9 @@ export const MessageComposer = React.memo(({
                                     : 'Type your message... (Enter to send, Shift+Enter for new line)'
                             }
                             disabled={isFormDisabled}
-                            className="min-h-[40px] max-h-[120px] resize-none pr-12"
-                            multiline
-                            rows={1}
+                            className="min-h-[40px] pr-12"
+                            autoResize={true}
+                            maxHeight={120}
                         />
 
                         {/* Character count for long messages */}

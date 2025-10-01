@@ -85,10 +85,14 @@ export const MagicCard = React.forwardRef(({
   variant = "default",
   gradient = false,
   glow = false,
+  animated = false,
   ...props 
 }, ref) => {
   const variants = {
     default: "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800",
+    primary: "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0",
+    secondary: "bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 border border-gray-200 dark:border-gray-600",
+    error: "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border border-red-200 dark:border-red-800",
     gradient: "bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 border border-gray-200/50 dark:border-gray-700/50",
     glass: "bg-white/10 backdrop-blur-md border border-white/20 dark:border-gray-800/50",
     magic: "bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 border border-indigo-200/50 dark:border-purple-800/50"
@@ -98,7 +102,7 @@ export const MagicCard = React.forwardRef(({
     <motion.div
       ref={ref}
       className={cn(
-        "rounded-xl shadow-sm transition-all duration-200",
+        "rounded-xl shadow-sm transition-all duration-200 relative overflow-hidden",
         variants[variant],
         glow && "shadow-lg hover:shadow-xl",
         gradient && "shadow-gradient",
@@ -111,6 +115,18 @@ export const MagicCard = React.forwardRef(({
       transition={{ duration: 0.2 }}
       {...props}
     >
+      {animated && (
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/10 to-transparent"
+          initial={{ x: "-100%" }}
+          animate={{ x: "100%" }}
+          transition={{
+            repeat: Infinity,
+            duration: 2,
+            ease: "linear"
+          }}
+        />
+      )}
       {children}
     </motion.div>
   )
@@ -203,4 +219,98 @@ export const MagicInput = React.forwardRef(({
 
 MagicInput.displayName = "MagicInput"
 
-export default { MagicButton, MagicCard, MagicInput }
+/**
+ * Magic UI Textarea Component with auto-resize and animations
+ */
+export const MagicTextarea = React.forwardRef(({ 
+  className, 
+  placeholder,
+  label,
+  error,
+  autoResize = true,
+  maxHeight = 120,
+  ...props 
+}, ref) => {
+  const [focused, setFocused] = React.useState(false)
+  const [hasValue, setHasValue] = React.useState(false)
+
+  const adjustHeight = React.useCallback(() => {
+    if (autoResize && ref?.current) {
+      ref.current.style.height = 'auto'
+      ref.current.style.height = `${Math.min(ref.current.scrollHeight, maxHeight)}px`
+    }
+  }, [autoResize, maxHeight, ref])
+
+  React.useEffect(() => {
+    adjustHeight()
+  }, [adjustHeight])
+
+  return (
+    <div className="relative">
+      <motion.div 
+        className="relative"
+        whileFocus={{ scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
+        <textarea
+          ref={ref}
+          className={cn(
+            "w-full px-4 py-3 bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 rounded-lg",
+            "transition-all duration-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
+            "placeholder-gray-500 dark:placeholder-gray-400 resize-none",
+            autoResize && "overflow-hidden",
+            error && "border-red-500 focus:border-red-500 focus:ring-red-500/10",
+            className
+          )}
+          placeholder={placeholder}
+          onFocus={() => setFocused(true)}
+          onBlur={(e) => {
+            setFocused(false)
+            setHasValue(e.target.value.length > 0)
+          }}
+          onChange={(e) => {
+            setHasValue(e.target.value.length > 0)
+            adjustHeight()
+            props.onChange?.(e)
+          }}
+          onInput={adjustHeight}
+          style={{ minHeight: '40px' }}
+          {...props}
+        />
+        
+        {label && (
+          <motion.label
+            className={cn(
+              "absolute left-4 transition-all duration-200 pointer-events-none",
+              "text-gray-500 dark:text-gray-400",
+              focused || hasValue 
+                ? "-top-2 text-xs bg-white dark:bg-gray-900 px-2 text-blue-600 dark:text-blue-400" 
+                : "top-3 text-sm"
+            )}
+            animate={{
+              y: focused || hasValue ? -8 : 0,
+              scale: focused || hasValue ? 0.85 : 1,
+            }}
+            transition={{ duration: 0.2 }}
+          >
+            {label}
+          </motion.label>
+        )}
+      </motion.div>
+      
+      {error && (
+        <motion.p
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-1 text-sm text-red-500"
+        >
+          {error}
+        </motion.p>
+      )}
+    </div>
+  )
+})
+
+MagicTextarea.displayName = "MagicTextarea"
+
+export default { MagicButton, MagicCard, MagicInput, MagicTextarea }

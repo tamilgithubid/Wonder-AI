@@ -5,7 +5,8 @@
 export {
   MagicButton,
   MagicCard,
-  MagicInput
+  MagicInput,
+  MagicTextarea
 } from './form-components'
 
 // Display Components  

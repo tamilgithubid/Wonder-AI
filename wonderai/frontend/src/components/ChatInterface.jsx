@@ -26,6 +26,11 @@ import {
     setError,
     clearError
 } from '@/store/chatSlice'
+import {
+    setStreamingMessage,
+    updateStreamingMessage,
+    completeStreamingMessage
+} from '@/store/chatSlice'
 import { useSendMessageMutation } from '@/store'
 import { useStreamingChat } from '@/hooks/useStreaming'
 import { toast } from 'sonner'
@@ -102,39 +107,87 @@ export const ChatInterface = React.memo(() => {
             // Start streaming response with conversation ID
             const stream = await startStreaming(currentConversationId, messageContent.trim())
 
-            // Process the streaming response
+            // Process the streaming response with buffering to avoid per-word dispatches
             const reader = stream.getReader()
-            let assistantMessage = {
-                id: `assistant_${Date.now()}`,
+
+            // Create a streaming message in the store (single card)
+            const streamingId = `streaming_${Date.now()}`
+            const baseStreamingMessage = {
+                id: streamingId,
                 role: 'assistant',
                 text: '',
                 timestamp: new Date().toISOString(),
-                isStreaming: true,
             }
 
-            // Add initial empty assistant message
-            dispatch(addMessage(assistantMessage))
+            // set initial streaming message in store
+            dispatch(setStreamingMessage({ ...baseStreamingMessage }))
 
             try {
+                // buffer and flush mechanism
+                let buffer = ''
+                let finished = false
+
+                // small debounce flush (e.g., 120ms) to show smooth typing
+                const FLUSH_MS = 120
+                let flushTimer = null
+
+                const flushBuffer = () => {
+                    if (!buffer) return
+                    // update store with buffered content
+                    dispatch(updateStreamingMessage({ text: buffer }))
+                    buffer = ''
+                }
+
                 while (true) {
                     const { done, value } = await reader.read()
                     if (done) break
 
                     if (value.type === 'content' && value.content) {
-                        // Update the assistant message with streaming content
-                        assistantMessage.text = value.fullContent
-                        dispatch(addMessage({ ...assistantMessage, text: value.fullContent }))
+                        // accumulate incoming content
+                        buffer = value.fullContent
+
+                        // reset debounce
+                        if (flushTimer) clearTimeout(flushTimer)
+                        flushTimer = setTimeout(flushBuffer, FLUSH_MS)
+
+                        // if the chunk indicates finished flag, mark finished and flush immediately
+                        if (value.finished) {
+                            finished = true
+                            if (flushTimer) {
+                                clearTimeout(flushTimer)
+                                flushTimer = null
+                            }
+                            flushBuffer()
+                            break
+                        }
                     } else if (value.type === 'complete') {
-                        // Finalize the message
-                        assistantMessage.isStreaming = false
-                        assistantMessage.text = value.fullContent
-                        dispatch(addMessage({ ...assistantMessage, isStreaming: false }))
+                        // finalize and flush
+                        if (flushTimer) {
+                            clearTimeout(flushTimer)
+                            flushTimer = null
+                        }
+                        finished = true
+                        // ensure final content is written
+                        if (value.fullContent) {
+                            dispatch(updateStreamingMessage({ text: value.fullContent }))
+                        }
                         break
                     }
+                }
+
+                // finalize streaming message
+                if (finished) {
+                    dispatch(completeStreamingMessage())
+                } else {
+                    // flush anything left
+                    if (buffer) dispatch(updateStreamingMessage({ text: buffer }))
+                    dispatch(completeStreamingMessage())
                 }
             } catch (streamError) {
                 console.error('Stream processing error:', streamError)
                 dispatch(setError('Streaming interrupted'))
+                // clear streaming state
+                dispatch(setStreamingMessage(null))
             }
 
             toast.success('Streaming response completed')

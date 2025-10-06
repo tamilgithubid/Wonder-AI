@@ -5,11 +5,11 @@ import { cn } from '@/lib/utils'
 /**
  * Magic UI Scroll Area with custom scrollbar styling
  */
-export const MagicScrollArea = React.forwardRef(({ 
-  className, 
+export const MagicScrollArea = React.forwardRef(({
+  className,
   children,
   maxHeight = "400px",
-  ...props 
+  ...props
 }, ref) => {
   return (
     <div
@@ -33,17 +33,17 @@ MagicScrollArea.displayName = "MagicScrollArea"
 /**
  * Magic UI Progress Bar with gradient fill and animations
  */
-export const MagicProgress = React.forwardRef(({ 
-  className, 
+export const MagicProgress = React.forwardRef(({
+  className,
   value = 0,
   max = 100,
   size = "default",
   variant = "default",
   animated = false,
-  ...props 
+  ...props
 }, ref) => {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100)
-  
+
   const sizes = {
     sm: "h-2",
     default: "h-3",
@@ -77,7 +77,7 @@ export const MagicProgress = React.forwardRef(({
         animate={{ width: `${percentage}%` }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       />
-      
+
       {animated && (
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
@@ -98,13 +98,13 @@ MagicProgress.displayName = "MagicProgress"
 /**
  * Magic UI Switch with smooth toggle animation
  */
-export const MagicSwitch = React.forwardRef(({ 
-  className, 
+export const MagicSwitch = React.forwardRef(({
+  className,
   checked = false,
   onCheckedChange,
   disabled = false,
   size = "default",
-  ...props 
+  ...props
 }, ref) => {
   const sizes = {
     sm: { container: "w-8 h-4", thumb: "w-3 h-3" },
@@ -118,8 +118,8 @@ export const MagicSwitch = React.forwardRef(({
       className={cn(
         "relative inline-flex items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
         sizes[size].container,
-        checked 
-          ? "bg-gradient-to-r from-blue-500 to-purple-500" 
+        checked
+          ? "bg-gradient-to-r from-blue-500 to-purple-500"
           : "bg-gray-200 dark:bg-gray-700",
         disabled && "opacity-50 cursor-not-allowed",
         className
@@ -148,15 +148,15 @@ MagicSwitch.displayName = "MagicSwitch"
 /**
  * Magic UI Slider with gradient track and animated thumb
  */
-export const MagicSlider = React.forwardRef(({ 
-  className, 
+export const MagicSlider = React.forwardRef(({
+  className,
   value = [0],
   onValueChange,
   max = 100,
   min = 0,
   step = 1,
   disabled = false,
-  ...props 
+  ...props
 }, ref) => {
   const percentage = ((value[0] - min) / (max - min)) * 100
 
@@ -179,7 +179,7 @@ export const MagicSlider = React.forwardRef(({
           transition={{ duration: 0.1 }}
         />
       </div>
-      
+
       {/* Thumb */}
       <motion.div
         className="absolute w-5 h-5 bg-white border-2 border-blue-500 rounded-full shadow-lg cursor-pointer"
@@ -193,12 +193,12 @@ export const MagicSlider = React.forwardRef(({
           if (disabled) return
           const rect = ref.current?.getBoundingClientRect()
           if (!rect) return
-          
+
           const newValue = Math.min(Math.max(
-            min + ((info.point.x - rect.left) / rect.width) * (max - min), 
+            min + ((info.point.x - rect.left) / rect.width) * (max - min),
             min
           ), max)
-          
+
           onValueChange?.([Math.round(newValue / step) * step])
         }}
       />
@@ -211,11 +211,11 @@ MagicSlider.displayName = "MagicSlider"
 /**
  * Magic UI Alert with gradient borders and icons
  */
-export const MagicAlert = React.forwardRef(({ 
-  className, 
+export const MagicAlert = React.forwardRef(({
+  className,
   children,
   variant = "default",
-  ...props 
+  ...props
 }, ref) => {
   const variants = {
     default: "border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100",
@@ -244,10 +244,10 @@ export const MagicAlert = React.forwardRef(({
 
 MagicAlert.displayName = "MagicAlert"
 
-export default { 
-  MagicScrollArea, 
-  MagicProgress, 
-  MagicSwitch, 
-  MagicSlider, 
-  MagicAlert 
+export default {
+  MagicScrollArea,
+  MagicProgress,
+  MagicSwitch,
+  MagicSlider,
+  MagicAlert
 }

@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { 
-    MagicButton, 
-    MagicBadge, 
-    MagicSeparator, 
-    MagicNav, 
+import {
+    MagicButton,
+    MagicBadge,
+    MagicSeparator,
+    MagicNav,
     MagicNavItem,
-    MagicDialog 
+    MagicDialog
 } from '@/components/magicui'
 import { ChatInterface } from './ChatInterface'
 import { Sidebar } from './Sidebar'
@@ -83,8 +83,8 @@ export const ChatLayout = React.memo(() => {
             >
                 <Menu className="h-5 w-5" />
             </MagicButton>
-            <MagicDialog 
-                open={isMobileSidebarOpen} 
+            <MagicDialog
+                open={isMobileSidebarOpen}
                 onClose={() => setIsMobileSidebarOpen(false)}
                 size="sm"
                 className="p-0 max-w-xs"

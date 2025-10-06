@@ -5,13 +5,13 @@ import { cn } from '@/lib/utils'
 /**
  * Magic UI Dialog/Modal Component with backdrop blur and animations
  */
-export const MagicDialog = ({ 
-  children, 
-  open, 
-  onClose, 
+export const MagicDialog = ({
+  children,
+  open,
+  onClose,
   className,
   size = "default",
-  ...props 
+  ...props
 }) => {
   const sizes = {
     sm: "max-w-md",
@@ -34,7 +34,7 @@ export const MagicDialog = ({
         onClick={onClose}
         {...props}
       />
-      
+
       {/* Dialog Content */}
       <motion.div
         className={cn(
@@ -57,11 +57,11 @@ export const MagicDialog = ({
 /**
  * Magic UI Navigation with hover effects and active states
  */
-export const MagicNav = React.forwardRef(({ 
-  className, 
+export const MagicNav = React.forwardRef(({
+  className,
   children,
   orientation = "horizontal",
-  ...props 
+  ...props
 }, ref) => {
   return (
     <nav
@@ -83,12 +83,12 @@ MagicNav.displayName = "MagicNav"
 /**
  * Magic UI Navigation Item with magnetic hover effects
  */
-export const MagicNavItem = React.forwardRef(({ 
-  className, 
+export const MagicNavItem = React.forwardRef(({
+  className,
   children,
   active = false,
   disabled = false,
-  ...props 
+  ...props
 }, ref) => {
   return (
     <motion.button
@@ -124,13 +124,13 @@ MagicNavItem.displayName = "MagicNavItem"
 /**
  * Magic UI Sidebar with slide animations
  */
-export const MagicSidebar = React.forwardRef(({ 
-  className, 
+export const MagicSidebar = React.forwardRef(({
+  className,
   children,
   open = true,
   side = "left",
   overlay = false,
-  ...props 
+  ...props
 }, ref) => {
   const sideClasses = {
     left: "left-0 border-r",
@@ -156,7 +156,7 @@ export const MagicSidebar = React.forwardRef(({
           exit={{ opacity: 0 }}
         />
       )}
-      
+
       <motion.aside
         ref={ref}
         className={cn(
@@ -182,16 +182,16 @@ MagicSidebar.displayName = "MagicSidebar"
 /**
  * Magic UI Tabs with smooth indicator animation
  */
-export const MagicTabs = ({ 
-  value, 
-  onValueChange, 
-  children, 
+export const MagicTabs = ({
+  value,
+  onValueChange,
+  children,
   className,
   orientation = "horizontal",
-  ...props 
+  ...props
 }) => {
   return (
-    <div 
+    <div
       className={cn(
         "w-full",
         orientation === "vertical" && "flex gap-4",
@@ -199,20 +199,20 @@ export const MagicTabs = ({
       )}
       {...props}
     >
-      {React.Children.map(children, child => 
+      {React.Children.map(children, child =>
         React.cloneElement(child, { value, onValueChange, orientation })
       )}
     </div>
   )
 }
 
-export const MagicTabsList = ({ 
-  children, 
-  value, 
-  onValueChange, 
+export const MagicTabsList = ({
+  children,
+  value,
+  onValueChange,
   orientation = "horizontal",
   className,
-  ...props 
+  ...props
 }) => {
   return (
     <div
@@ -223,21 +223,21 @@ export const MagicTabsList = ({
       )}
       {...props}
     >
-      {React.Children.map(children, child => 
+      {React.Children.map(children, child =>
         React.cloneElement(child, { value, onValueChange, orientation })
       )}
     </div>
   )
 }
 
-export const MagicTabsTrigger = ({ 
-  children, 
-  tabValue, 
-  value, 
+export const MagicTabsTrigger = ({
+  children,
+  tabValue,
+  value,
   onValueChange,
   orientation = "horizontal",
   className,
-  ...props 
+  ...props
 }) => {
   const isActive = value === tabValue
 
@@ -267,12 +267,12 @@ export const MagicTabsTrigger = ({
   )
 }
 
-export const MagicTabsContent = ({ 
-  children, 
-  tabValue, 
+export const MagicTabsContent = ({
+  children,
+  tabValue,
   value,
   className,
-  ...props 
+  ...props
 }) => {
   if (value !== tabValue) return null
 
@@ -290,13 +290,13 @@ export const MagicTabsContent = ({
   )
 }
 
-export default { 
-  MagicDialog, 
-  MagicNav, 
-  MagicNavItem, 
-  MagicSidebar, 
-  MagicTabs, 
-  MagicTabsList, 
-  MagicTabsTrigger, 
-  MagicTabsContent 
+export default {
+  MagicDialog,
+  MagicNav,
+  MagicNavItem,
+  MagicSidebar,
+  MagicTabs,
+  MagicTabsList,
+  MagicTabsTrigger,
+  MagicTabsContent
 }

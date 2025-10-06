@@ -6,15 +6,15 @@ import { cn } from '@/lib/utils'
  * Magic UI Animated Button Component
  * Features: Hover effects, click animations, gradient backgrounds
  */
-export const MagicButton = React.forwardRef(({ 
-  className, 
-  variant = "default", 
-  size = "default", 
-  children, 
+export const MagicButton = React.forwardRef(({
+  className,
+  variant = "default",
+  size = "default",
+  children,
   disabled = false,
   loading = false,
   icon,
-  ...props 
+  ...props
 }, ref) => {
   const variants = {
     default: "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg hover:shadow-xl",
@@ -58,7 +58,7 @@ export const MagicButton = React.forwardRef(({
           }}
         />
       )}
-      
+
       {loading && (
         <motion.div
           className="w-4 h-4 border-2 border-current border-t-transparent rounded-full"
@@ -66,9 +66,9 @@ export const MagicButton = React.forwardRef(({
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
         />
       )}
-      
+
       {icon && <span className="w-4 h-4">{icon}</span>}
-      
+
       {children}
     </motion.button>
   )
@@ -79,14 +79,14 @@ MagicButton.displayName = "MagicButton"
 /**
  * Magic UI Card Component with hover effects and gradients
  */
-export const MagicCard = React.forwardRef(({ 
-  className, 
-  children, 
+export const MagicCard = React.forwardRef(({
+  className,
+  children,
   variant = "default",
   gradient = false,
   glow = false,
   animated = false,
-  ...props 
+  ...props
 }, ref) => {
   const variants = {
     default: "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800",
@@ -108,7 +108,7 @@ export const MagicCard = React.forwardRef(({
         gradient && "shadow-gradient",
         className
       )}
-      whileHover={{ 
+      whileHover={{
         scale: 1.02,
         boxShadow: glow ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" : undefined
       }}
@@ -137,21 +137,21 @@ MagicCard.displayName = "MagicCard"
 /**
  * Magic UI Input Component with floating labels and animations
  */
-export const MagicInput = React.forwardRef(({ 
-  className, 
-  type = "text", 
+export const MagicInput = React.forwardRef(({
+  className,
+  type = "text",
   placeholder,
   label,
   error,
   icon,
-  ...props 
+  ...props
 }, ref) => {
   const [focused, setFocused] = React.useState(false)
   const [hasValue, setHasValue] = React.useState(false)
 
   return (
     <div className="relative">
-      <motion.div 
+      <motion.div
         className="relative"
         whileFocus={{ scale: 1.02 }}
         transition={{ duration: 0.2 }}
@@ -161,7 +161,7 @@ export const MagicInput = React.forwardRef(({
             {icon}
           </div>
         )}
-        
+
         <input
           ref={ref}
           type={type}
@@ -182,15 +182,15 @@ export const MagicInput = React.forwardRef(({
           onChange={(e) => setHasValue(e.target.value.length > 0)}
           {...props}
         />
-        
+
         {label && (
           <motion.label
             className={cn(
               "absolute left-4 transition-all duration-200 pointer-events-none",
               "text-gray-500 dark:text-gray-400",
               icon && "left-10",
-              focused || hasValue 
-                ? "-top-2 text-xs bg-white dark:bg-gray-900 px-2 text-blue-600 dark:text-blue-400" 
+              focused || hasValue
+                ? "-top-2 text-xs bg-white dark:bg-gray-900 px-2 text-blue-600 dark:text-blue-400"
                 : "top-1/2 transform -translate-y-1/2 text-sm"
             )}
             animate={{
@@ -203,7 +203,7 @@ export const MagicInput = React.forwardRef(({
           </motion.label>
         )}
       </motion.div>
-      
+
       {error && (
         <motion.p
           initial={{ opacity: 0, y: -10 }}
@@ -222,14 +222,14 @@ MagicInput.displayName = "MagicInput"
 /**
  * Magic UI Textarea Component with auto-resize and animations
  */
-export const MagicTextarea = React.forwardRef(({ 
-  className, 
+export const MagicTextarea = React.forwardRef(({
+  className,
   placeholder,
   label,
   error,
   autoResize = true,
   maxHeight = 120,
-  ...props 
+  ...props
 }, ref) => {
   const [focused, setFocused] = React.useState(false)
   const [hasValue, setHasValue] = React.useState(false)
@@ -247,7 +247,7 @@ export const MagicTextarea = React.forwardRef(({
 
   return (
     <div className="relative">
-      <motion.div 
+      <motion.div
         className="relative"
         whileFocus={{ scale: 1.02 }}
         transition={{ duration: 0.2 }}
@@ -277,14 +277,14 @@ export const MagicTextarea = React.forwardRef(({
           style={{ minHeight: '40px' }}
           {...props}
         />
-        
+
         {label && (
           <motion.label
             className={cn(
               "absolute left-4 transition-all duration-200 pointer-events-none",
               "text-gray-500 dark:text-gray-400",
-              focused || hasValue 
-                ? "-top-2 text-xs bg-white dark:bg-gray-900 px-2 text-blue-600 dark:text-blue-400" 
+              focused || hasValue
+                ? "-top-2 text-xs bg-white dark:bg-gray-900 px-2 text-blue-600 dark:text-blue-400"
                 : "top-3 text-sm"
             )}
             animate={{
@@ -297,7 +297,7 @@ export const MagicTextarea = React.forwardRef(({
           </motion.label>
         )}
       </motion.div>
-      
+
       {error && (
         <motion.p
           initial={{ opacity: 0, y: -10 }}

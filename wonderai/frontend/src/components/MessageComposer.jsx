@@ -5,12 +5,12 @@ import React, {
     useEffect,
     useActionState
 } from 'react'
-import { 
-    MagicButton, 
-    MagicTextarea, 
-    MagicBadge, 
+import {
+    MagicButton,
+    MagicTextarea,
+    MagicBadge,
     MagicProgress,
-    MagicAlert 
+    MagicAlert
 } from '@/components/magicui'
 import {
     Send,

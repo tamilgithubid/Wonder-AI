@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
-import { 
-    MagicCard, 
-    MagicBadge, 
-    MagicButton, 
-    MagicAvatar, 
-    MagicSeparator, 
+import {
+    MagicCard,
+    MagicBadge,
+    MagicButton,
+    MagicAvatar,
+    MagicSeparator,
     MagicSkeleton,
-    MagicTooltip 
+    MagicTooltip
 } from '@/components/magicui'
 import { CodeBlock } from './CodeBlock'
 import {
@@ -145,7 +145,7 @@ const MessageItem = React.memo(({ message }) => {
       ${isError ? 'opacity-60' : ''}
     `}>
             {/* Avatar */}
-            <MagicAvatar 
+            <MagicAvatar
                 className="w-8 h-8 mt-1 shrink-0"
                 fallback={isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 online={!isError}
@@ -158,7 +158,7 @@ const MessageItem = React.memo(({ message }) => {
         ${isUser ? 'items-end' : 'items-start'}
       `}>
                 {/* Message Bubble */}
-                <MagicCard 
+                <MagicCard
                     className={`
                         relative overflow-hidden
                         ${isUser ? 'ml-auto' : ''}

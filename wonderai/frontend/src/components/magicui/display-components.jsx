@@ -5,15 +5,15 @@ import { cn } from '@/lib/utils'
 /**
  * Magic UI Avatar Component with animated borders and status indicators
  */
-export const MagicAvatar = React.forwardRef(({ 
-  className, 
-  src, 
-  alt, 
+export const MagicAvatar = React.forwardRef(({
+  className,
+  src,
+  alt,
   fallback,
   size = "default",
   status,
   online = false,
-  ...props 
+  ...props
 }, ref) => {
   const sizes = {
     sm: "w-8 h-8",
@@ -23,7 +23,7 @@ export const MagicAvatar = React.forwardRef(({
   }
 
   return (
-    <motion.div 
+    <motion.div
       ref={ref}
       className={cn("relative inline-flex", className)}
       whileHover={{ scale: 1.05 }}
@@ -48,7 +48,7 @@ export const MagicAvatar = React.forwardRef(({
           )}
         </div>
       </div>
-      
+
       {(status || online) && (
         <motion.div
           className={cn(
@@ -69,13 +69,13 @@ MagicAvatar.displayName = "MagicAvatar"
 /**
  * Magic UI Badge Component with glow effects and animations
  */
-export const MagicBadge = React.forwardRef(({ 
-  className, 
+export const MagicBadge = React.forwardRef(({
+  className,
   variant = "default",
   children,
   pulse = false,
   glow = false,
-  ...props 
+  ...props
 }, ref) => {
   const variants = {
     default: "bg-gradient-to-r from-blue-500 to-purple-500 text-white",
@@ -110,19 +110,19 @@ MagicBadge.displayName = "MagicBadge"
 /**
  * Magic UI Separator with gradient effects
  */
-export const MagicSeparator = React.forwardRef(({ 
-  className, 
+export const MagicSeparator = React.forwardRef(({
+  className,
   orientation = "horizontal",
   gradient = false,
-  ...props 
+  ...props
 }, ref) => {
   return (
     <motion.div
       ref={ref}
       className={cn(
         "shrink-0",
-        orientation === "horizontal" 
-          ? gradient 
+        orientation === "horizontal"
+          ? gradient
             ? "h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent dark:via-gray-700"
             : "h-px w-full bg-gray-200 dark:bg-gray-800"
           : gradient
@@ -169,12 +169,12 @@ export const MagicSkeleton = ({ className, ...props }) => {
 /**
  * Magic UI Tooltip with animations
  */
-export const MagicTooltip = ({ 
-  children, 
-  content, 
+export const MagicTooltip = ({
+  children,
+  content,
   side = "top",
   className,
-  ...props 
+  ...props
 }) => {
   const [open, setOpen] = React.useState(false)
 
@@ -186,14 +186,14 @@ export const MagicTooltip = ({
   }
 
   return (
-    <div 
+    <div
       className="relative inline-block"
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
       {...props}
     >
       {children}
-      
+
       <AnimatePresence>
         {open && (
           <motion.div
@@ -208,13 +208,13 @@ export const MagicTooltip = ({
             transition={{ duration: 0.15 }}
           >
             {content}
-            <div className="absolute w-2 h-2 bg-gray-900 dark:bg-gray-700 transform rotate-45" 
-                 style={{
-                   [side === 'top' ? 'top' : side === 'bottom' ? 'bottom' : side === 'left' ? 'right' : 'left']: 
-                   side === 'top' || side === 'bottom' ? 'calc(100% - 4px)' : '50%',
-                   [side === 'top' || side === 'bottom' ? 'left' : 'top']: '50%',
-                   transform: 'translate(-50%, -50%) rotate(45deg)'
-                 }} 
+            <div className="absolute w-2 h-2 bg-gray-900 dark:bg-gray-700 transform rotate-45"
+              style={{
+                [side === 'top' ? 'top' : side === 'bottom' ? 'bottom' : side === 'left' ? 'right' : 'left']:
+                  side === 'top' || side === 'bottom' ? 'calc(100% - 4px)' : '50%',
+                [side === 'top' || side === 'bottom' ? 'left' : 'top']: '50%',
+                transform: 'translate(-50%, -50%) rotate(45deg)'
+              }}
             />
           </motion.div>
         )}
